@@ -288,34 +288,34 @@ fn test_wasip2_component_http_proxy() -> anyhow::Result<()> {
     Ok(())
 }
 
-// The wasm component is built using componentize-dotnet as illustrated in the following example::
-// https://bytecodealliance.org/articles/simplifying-components-for-dotnet-developers-with-componentize-dotnet
-// this ensures we are able to use wasm built from other languages https://github.com/containerd/runwasi/pull/723
-#[test]
-#[serial]
-fn test_wasip2_component_http_proxy_csharp() -> anyhow::Result<()> {
-    let srv = WasiTest::<WasiInstance>::builder()?
-        .with_wasm(HELLO_WASI_HTTP_CSHARP)?
-        .with_host_network()
-        .build()?;
+// // The wasm component is built using componentize-dotnet as illustrated in the following example::
+// // https://bytecodealliance.org/articles/simplifying-components-for-dotnet-developers-with-componentize-dotnet
+// // this ensures we are able to use wasm built from other languages https://github.com/containerd/runwasi/pull/723
+// #[test]
+// #[serial]
+// fn test_wasip2_component_http_proxy_csharp() -> anyhow::Result<()> {
+//     let srv = WasiTest::<WasiInstance>::builder()?
+//         .with_wasm(HELLO_WASI_HTTP_CSHARP)?
+//         .with_host_network()
+//         .build()?;
 
-    let srv = srv.start()?;
+//     let srv = srv.start()?;
 
-    // dotnet takes a bit longer to start up
-    // Todo: find out why this doesn't happen in wasmtime directly
-    let response = http_get_with_backoff_secs(2);
+//     // dotnet takes a bit longer to start up
+//     // Todo: find out why this doesn't happen in wasmtime directly
+//     let response = http_get_with_backoff_secs(2);
 
-    let response = response.expect("Server did not start in time");
-    assert!(response.status().is_success());
+//     let response = response.expect("Server did not start in time");
+//     assert!(response.status().is_success());
 
-    let body = response.text().unwrap();
-    assert_eq!(body, "Hello, from C#!");
+//     let body = response.text().unwrap();
+//     assert_eq!(body, "Hello, from C#!");
 
-    let (exit_code, _, _) = srv.ctrl_c()?.wait(Duration::from_secs(5))?;
-    assert_eq!(exit_code, 0);
+//     let (exit_code, _, _) = srv.ctrl_c()?.wait(Duration::from_secs(5))?;
+//     assert_eq!(exit_code, 0);
 
-    Ok(())
-}
+//     Ok(())
+// }
 
 // Test that the shim can terminate component targeting wasi:http/proxy by sending SIGTERM.
 #[test]

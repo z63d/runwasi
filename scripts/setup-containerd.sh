@@ -9,7 +9,7 @@ RUNC_VERSION="1.1.14"
 CNI_PLUGINS_VERSION="1.5.1"
 
 # Change to arm64 if running on apple silicon
-CHIPSET="arm64"
+CHIPSET="amd64"
 
 # Define URLs
 CONTAINERD_URL="https://github.com/containerd/containerd/releases/download/v${CONTAINERD_VERSION}/containerd-${CONTAINERD_VERSION}-linux-${CHIPSET}.tar.gz"

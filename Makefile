@@ -260,8 +260,6 @@ test/k8s/deploy-workload-%: test/k8s/clean test/k8s/cluster-%
 
 .PHONY: test/k8s/deploy-workload-oci-%
 test/k8s/deploy-workload-oci-%: test/k8s/clean test/k8s/cluster-% dist/img-oci.tar dist/img-oci-artifact.tar test/k8s/cluster-%
-	bin/kind load image-archive --name $(KIND_CLUSTER_NAME) dist/img-oci.tar
-	bin/kind load image-archive --name $(KIND_CLUSTER_NAME) dist/img-oci-artifact.tar
 	kubectl --context=kind-$(KIND_CLUSTER_NAME) apply -f test/k8s/deploy.oci.yaml
 	kubectl --context=kind-$(KIND_CLUSTER_NAME) wait deployment wasi-demo --for condition=Available=True --timeout=300s
 	# verify that we are still running after some time
