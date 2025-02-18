@@ -21,6 +21,7 @@ pub struct Cli<T: Instance + Sync + Send> {
     containerd_address: String,
     exit: Arc<ExitSignal>,
     _id: String,
+    systemd_cgroup: bool,
 }
 
 impl<I> Debug for Cli<I>
@@ -52,6 +53,7 @@ where
             containerd_address: args.address.clone(),
             exit: Arc::default(),
             _id: args.id.to_string(),
+            systemd_cgroup: true,
         }
     }
 
@@ -92,6 +94,7 @@ where
             exit,
             &self.namespace,
             &self.containerd_address,
+            self.systemd_cgroup,
         )
     }
 

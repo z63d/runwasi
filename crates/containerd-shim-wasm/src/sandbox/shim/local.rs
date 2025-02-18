@@ -20,6 +20,9 @@ use containerd_shim::util::IntoOption;
 use containerd_shim::{DeleteResponse, ExitSignal, TtrpcContext, TtrpcResult};
 use log::debug;
 use oci_spec::runtime::Spec;
+
+use regex::Regex;
+
 #[cfg(feature = "opentelemetry")]
 use tracing_opentelemetry::OpenTelemetrySpanExt as _;
 
@@ -45,6 +48,7 @@ pub struct Local<T: Instance + Send + Sync, E: EventSender = RemoteEventSender> 
     exit: Arc<ExitSignal>,
     namespace: String,
     containerd_address: String,
+    systemd_cgroup: bool,
 }
 
 impl<T: Instance + Send + Sync, E: EventSender> Local<T, E> {
@@ -56,6 +60,7 @@ impl<T: Instance + Send + Sync, E: EventSender> Local<T, E> {
         exit: Arc<ExitSignal>,
         namespace: impl AsRef<str>,
         containerd_address: impl AsRef<str>,
+        systemd_cgroup: bool,
     ) -> Self {
         let instances = RwLock::default();
         let namespace = namespace.as_ref().to_string();
@@ -67,6 +72,7 @@ impl<T: Instance + Send + Sync, E: EventSender> Local<T, E> {
             exit,
             namespace,
             containerd_address,
+            systemd_cgroup,
         }
     }
 
@@ -88,7 +94,11 @@ impl<T: Instance + Send + Sync, E: EventSender> Local<T, E> {
 
     #[cfg_attr(feature = "tracing", tracing::instrument(parent = tracing::Span::current(), skip_all, level = "Debug"))]
     fn instance_config(&self) -> InstanceConfig {
-        InstanceConfig::new(&self.namespace, &self.containerd_address)
+        InstanceConfig::new(
+            &self.namespace,
+            &self.containerd_address,
+            self.systemd_cgroup,
+        )
     }
 }
 
@@ -96,6 +106,34 @@ impl<T: Instance + Send + Sync, E: EventSender> Local<T, E> {
 impl<T: Instance + Send + Sync, E: EventSender> Local<T, E> {
     #[cfg_attr(feature = "tracing", tracing::instrument(parent = tracing::Span::current(), skip_all, level = "Debug"))]
     fn task_create(&self, req: CreateTaskRequest) -> Result<CreateTaskResponse> {
+        fn parse_systemd_cgroup(input: &str) -> Option<bool> {
+            // let re = Regex::new(r#"^"\u{1a}\u{15}SystemdCgroup = (true|false)\n"$"#).unwrap();
+            let re = Regex::new(r#"\u{1a}\u{15}SystemdCgroup = (true|false)\n"#).unwrap();
+            if let Some(captures) = re.captures(input) {
+                if let Some(value_match) = captures.get(1) {
+                    let value_str = value_match.as_str();
+                    return Some(value_str.parse().unwrap_or(false));
+                }
+            }
+            None
+        }
+
+        let mut systemd_cgroup_enabled = true;
+        if let Some(any) = req.options.as_ref() {
+            if let Ok(opts_str) = String::from_utf8(any.value.to_vec()) {
+                debug!("runwasi: opts_str: {:?}", opts_str);
+                if let Some(result) = parse_systemd_cgroup(opts_str.as_str()) {
+                    println!("runwasi: Result: {:?}", result);
+                    systemd_cgroup_enabled = result;
+                }
+            }
+        }
+
+        debug!(
+            "runwasi: systemd_cgroup_enabled: {:?}",
+            systemd_cgroup_enabled
+        );
+
         if !req.checkpoint().is_empty() || !req.parent_checkpoint().is_empty() {
             return Err(ShimError::Unimplemented("checkpoint is not supported".to_string()).into());
         }
@@ -144,7 +182,12 @@ impl<T: Instance + Send + Sync, E: EventSender> Local<T, E> {
         cfg.set_bundle(&req.bundle)
             .set_stdin(&req.stdin)
             .set_stdout(&req.stdout)
-            .set_stderr(&req.stderr);
+            .set_stderr(&req.stderr)
+            .set_systemd_cgroup(systemd_cgroup_enabled);
+        debug!(
+            "runwasi: cfg.get_systemd_cgroup: {:?}",
+            cfg.get_systemd_cgroup()
+        );
 
         // Check if this is a cri container
         let instance = InstanceData::new(req.id(), cfg)?;
@@ -336,7 +379,7 @@ impl<T: Instance + Sync + Send, E: EventSender> Task for Local<T, E> {
         _ctx: &TtrpcContext,
         req: CreateTaskRequest,
     ) -> TtrpcResult<CreateTaskResponse> {
-        debug!("create: {:?}", req);
+        debug!("runwasi: create: {:?}", req);
 
         #[cfg(feature = "opentelemetry")]
         tracing::Span::current().set_parent(extract_context(&_ctx.metadata));

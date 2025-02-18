@@ -12,6 +12,7 @@ repository.workspace = true
 doctest = false
 
 [dependencies]
+regex = "1.11.1"
 anyhow = { workspace = true }
 chrono = { workspace = true }
 containerd-shim = { workspace = true }

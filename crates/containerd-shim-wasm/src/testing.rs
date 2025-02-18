@@ -214,7 +214,7 @@ where
 
         log::info!("building wasi test: {}", dir.display());
 
-        let mut cfg = InstanceConfig::new(TEST_NAMESPACE, "/run/containerd/containerd.sock");
+        let mut cfg = InstanceConfig::new(TEST_NAMESPACE, "/run/containerd/containerd.sock", true);
         cfg.set_bundle(dir)
             .set_stdout(dir.join("stdout"))
             .set_stderr(dir.join("stderr"))

@@ -7,6 +7,10 @@ use anyhow::Context;
 use chrono::{DateTime, Utc};
 use containerd_shim::api::Status;
 use containerd_shim::event::Event;
+use protobuf::well_known_types::any::Any;
+use protobuf::well_known_types::struct_::value::Kind;
+use protobuf::well_known_types::struct_::Struct;
+use protobuf::well_known_types::struct_::Value;
 use protobuf::MessageDyn;
 use serde_json as json;
 use tempfile::tempdir;
@@ -111,6 +115,7 @@ fn test_delete_after_create() {
         Arc::new(ExitSignal::default()),
         "test_namespace",
         "/test/address",
+        true,
     ));
     let mut _wrapped = LocalWithDestructor::new(local.clone());
 
@@ -142,6 +147,7 @@ fn test_cri_task() -> Result<()> {
         exit_signal,
         "test_namespace",
         "/test/address",
+        true,
     ));
 
     let mut _wrapped = LocalWithDestructor::new(local.clone());
@@ -312,6 +318,7 @@ fn test_task_lifecycle() -> Result<()> {
         exit_signal,
         "test_namespace",
         "/test/address",
+        true,
     ));
 
     let mut _wrapped = LocalWithDestructor::new(local.clone());
