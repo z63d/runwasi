@@ -20,6 +20,7 @@ use containerd_shim::util::IntoOption;
 use containerd_shim::{DeleteResponse, ExitSignal, TtrpcContext, TtrpcResult};
 use log::debug;
 use oci_spec::runtime::Spec;
+use regex::Regex;
 #[cfg(feature = "opentelemetry")]
 use tracing_opentelemetry::OpenTelemetrySpanExt as _;
 
@@ -99,6 +100,28 @@ impl<T: Instance + Send + Sync, E: EventSender> Local<T, E> {
 impl<T: Instance + Send + Sync, E: EventSender> Local<T, E> {
     #[cfg_attr(feature = "tracing", tracing::instrument(skip(self), level = "Debug"))]
     fn task_create(&self, req: CreateTaskRequest) -> Result<CreateTaskResponse> {
+        // Deserialization in the following way doesn't work.
+        // https://github.com/containerd/rust-extensions/blob/shim-v0.8.0/crates/runc-shim/src/runc.rs#L85-L88
+        // Because req.options gives us the following string: "\u{1a}\u{15}SystemdCgroup = true\n"
+        // So use regex to work around this issue.
+        fn parse_systemd_cgroup(input: &str) -> Option<bool> {
+            let regex: Regex = Regex::new(r#"\u{1a}\u{15}SystemdCgroup = (true|false)\n"#).unwrap();
+            if let Some(captures) = regex.captures(input) {
+                if let Some(value_match) = captures.get(1) {
+                    let value_str = value_match.as_str();
+                    return Some(value_str.parse().unwrap_or(true));
+                }
+            }
+            None
+        }
+        let systemd_cgroup = match req.options.as_ref() {
+            Some(any) => match String::from_utf8(any.value.to_vec()) {
+                Ok(opts_str) => parse_systemd_cgroup(opts_str.as_str()).unwrap_or(true),
+                Err(_) => true,
+            },
+            None => true,
+        };
+
         if !req.checkpoint().is_empty() || !req.parent_checkpoint().is_empty() {
             return Err(ShimError::Unimplemented("checkpoint is not supported".to_string()).into());
         }
@@ -147,7 +170,8 @@ impl<T: Instance + Send + Sync, E: EventSender> Local<T, E> {
         cfg.set_bundle(&req.bundle)
             .set_stdin(&req.stdin)
             .set_stdout(&req.stdout)
-            .set_stderr(&req.stderr);
+            .set_stderr(&req.stderr)
+            .set_systemd_cgroup(systemd_cgroup);
 
         // Check if this is a cri container
         let instance = InstanceData::new(req.id(), cfg)?;
