@@ -84,7 +84,7 @@ build-wasm:
 	$(CARGO) build $(TARGET_FLAG) -p containerd-shim-wasm $(FEATURES_wasm) $(RELEASE_FLAG)
 
 build-%:
-	$(CARGO) build $(TARGET_FLAG) -p containerd-shim-$* $(FEATURES_$*) $(RELEASE_FLAG)
+	RUST_LOG=debug $(CARGO) build $(TARGET_FLAG) -p containerd-shim-$* $(FEATURES_$*) $(RELEASE_FLAG)
 
 build-oci-tar-builder:
 	$(CARGO) build $(TARGET_FLAG) -p oci-tar-builder $(FEATURES_$*) $(RELEASE_FLAG)
@@ -363,6 +363,7 @@ test/k3s-%: dist/img.tar bin/k3s dist-%
 	sleep 5s
 	sudo bin/k3s kubectl wait deployment wasi-demo --for condition=Available=True --timeout=5s
 	sudo bin/k3s kubectl get pods -o wide
+	sleep 300s
 	sudo bin/k3s kubectl delete -f test/k8s/deploy.yaml
 	sudo bin/k3s kubectl wait deployment wasi-demo --for delete --timeout=60s
 

@@ -11,7 +11,7 @@ metadata:
   labels:
     app: wasi-demo
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       app: wasi-demo
@@ -24,7 +24,9 @@ spec:
       containers:
       - name: demo
         image: ghcr.io/containerd/runwasi/wasi-demo-app:latest
-      - name: nginx
-        image: docker.io/nginx:latest
+      - name: http-echo
+        image: hashicorp/http-echo:latest
+        args:
+        - '-text="hello wasi"'
         ports:
-        - containerPort: 80
+        - containerPort: 5678

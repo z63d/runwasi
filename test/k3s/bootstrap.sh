@@ -4,8 +4,13 @@ set -ex
 rm -f /var/lib/rancher/k3s/agent/etc/containerd/config.toml.tmpl
 cp -f /var/lib/rancher/k3s/agent/etc/containerd/config.toml /var/lib/rancher/k3s/agent/etc/containerd/config.toml.tmpl
 cat <<EOF >> /var/lib/rancher/k3s/agent/etc/containerd/config.toml.tmpl
+[debug]
+  level = "debug"
+
 [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.wasm]
   runtime_type = "$PWD/dist/bin/containerd-shim-$1-v1"
+  [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.wasm.options]
+    SystemdCgroup = true
 EOF
 
 cat <<EOF > /etc/systemd/system/k3s-runwasi.service.env

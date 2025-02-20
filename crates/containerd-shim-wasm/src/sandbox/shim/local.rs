@@ -6,6 +6,7 @@ use std::sync::{Arc, RwLock};
 use std::thread;
 use std::time::Duration;
 
+use anyhow::ensure;
 use anyhow::Context as AnyhowContext;
 use containerd_shim::api::{
     ConnectRequest, ConnectResponse, CreateTaskRequest, CreateTaskResponse, DeleteRequest, Empty,
@@ -20,7 +21,10 @@ use containerd_shim::util::IntoOption;
 use containerd_shim::{DeleteResponse, ExitSignal, TtrpcContext, TtrpcResult};
 use log::debug;
 use oci_spec::runtime::Spec;
+use prost::Message;
+use protobuf::well_known_types::any::Any;
 use regex::Regex;
+use serde::Deserialize;
 #[cfg(feature = "opentelemetry")]
 use tracing_opentelemetry::OpenTelemetrySpanExt as _;
 
@@ -100,27 +104,74 @@ impl<T: Instance + Send + Sync, E: EventSender> Local<T, E> {
 impl<T: Instance + Send + Sync, E: EventSender> Local<T, E> {
     #[cfg_attr(feature = "tracing", tracing::instrument(skip(self), level = "Debug"))]
     fn task_create(&self, req: CreateTaskRequest) -> Result<CreateTaskResponse> {
-        // Deserialization in the following way doesn't work.
-        // https://github.com/containerd/rust-extensions/blob/shim-v0.8.0/crates/runc-shim/src/runc.rs#L85-L88
-        // Because req.options gives us the following string: "\u{1a}\u{15}SystemdCgroup = true\n"
-        // So use regex to work around this issue.
-        fn parse_systemd_cgroup(input: &str) -> Option<bool> {
-            let regex: Regex = Regex::new(r#"\u{1a}\u{15}SystemdCgroup = (true|false)\n"#).unwrap();
-            if let Some(captures) = regex.captures(input) {
-                if let Some(value_match) = captures.get(1) {
-                    let value_str = value_match.as_str();
-                    return Some(value_str.parse().unwrap_or(true));
-                }
-            }
-            None
+        log::info!("runwasi: task_create:");
+        log::debug!("runwasi: task_create:");
+        #[derive(Deserialize, Default, Clone, PartialEq, Debug)]
+        struct Config {
+            #[serde(alias = "SystemdCgroup")]
+            systemd_cgroup: bool,
         }
-        let systemd_cgroup = match req.options.as_ref() {
-            Some(any) => match String::from_utf8(any.value.to_vec()) {
-                Ok(opts_str) => parse_systemd_cgroup(opts_str.as_str()).unwrap_or(true),
-                Err(_) => true,
-            },
-            None => true,
-        };
+
+        fn get_config(options: Option<&Any>) -> anyhow::Result<Config> {
+            log::debug!("runwasi: get_config:");
+            let Some(opts) = options else {
+                return Ok(Default::default());
+            };
+            log::info!("runwasi: opts: {:?}", opts);
+
+            ensure!(
+                opts.type_url == "runtimeoptions.v1.Options",
+                "Invalid options type {}",
+                opts.type_url
+            );
+
+            #[derive(Message, Clone, PartialEq)]
+            struct Options {
+                #[prost(string)]
+                type_url: String,
+                #[prost(string)]
+                config_path: String,
+                #[prost(string)]
+                config_body: String,
+            }
+
+            let opts = Options::decode(opts.value.as_slice())?;
+            log::info!("runwasi: opts decode: {:?}", opts);
+            log::info!("runwasi: opts config_body: {:?}", opts.config_body.as_str());
+
+            let config = toml::from_str(opts.config_body.as_str())
+                .map_err(|err| Error::InvalidArgument(format!("invalid shim options: {err}")))?;
+            log::info!("runwasi: config: {:?}", config);
+
+            Ok(config)
+        }
+
+        let config = get_config(req.options.as_ref())
+            .map_err(|err| Error::InvalidArgument(format!("invalid shim options: {err}")))?;
+        let systemd_cgroup = config.systemd_cgroup;
+        log::info!("runwasi: systemd_cgroup: {:?}", systemd_cgroup);
+
+        // // Deserialization in the following way doesn't work.
+        // // https://github.com/containerd/rust-extensions/blob/shim-v0.8.0/crates/runc-shim/src/runc.rs#L85-L88
+        // // Because req.options gives us the following string: "\u{1a}\u{15}SystemdCgroup = true\n"
+        // // So use regex to work around this issue.
+        // fn parse_systemd_cgroup(input: &str) -> Option<bool> {
+        //     let regex: Regex = Regex::new(r#"\u{1a}\u{15}SystemdCgroup = (true|false)\n"#).unwrap();
+        //     if let Some(captures) = regex.captures(input) {
+        //         if let Some(value_match) = captures.get(1) {
+        //             let value_str = value_match.as_str();
+        //             return Some(value_str.parse().unwrap_or(true));
+        //         }
+        //     }
+        //     None
+        // }
+        // let systemd_cgroup = match req.options.as_ref() {
+        //     Some(any) => match String::from_utf8(any.value.to_vec()) {
+        //         Ok(opts_str) => parse_systemd_cgroup(opts_str.as_str()).unwrap_or(true),
+        //         Err(_) => true,
+        //     },
+        //     None => true,
+        // };
 
         if !req.checkpoint().is_empty() || !req.parent_checkpoint().is_empty() {
             return Err(ShimError::Unimplemented("checkpoint is not supported".to_string()).into());
