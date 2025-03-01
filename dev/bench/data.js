@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1740789451898,
+  "lastUpdate": 1740789453031,
   "repoUrl": "https://github.com/z63d/runwasi",
   "entries": {
     "Criterion.rs Benchmark": [
@@ -116,6 +116,52 @@ window.BENCHMARK_DATA = {
             "value": 84519086,
             "range": "± 1467509",
             "unit": "ns/iter"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "name": "Jorge Prendes",
+            "username": "jprendes",
+            "email": "jorge.prendes@gmail.com"
+          },
+          "committer": {
+            "name": "GitHub",
+            "username": "web-flow",
+            "email": "noreply@github.com"
+          },
+          "id": "3a72785bf73ec69191929d5529d0ab6c2842a6f6",
+          "message": "Merge pull request #885 from jprendes/async-instance-wait\n\nUse async for the instance's wait method",
+          "timestamp": "2025-02-27T21:22:36Z",
+          "url": "https://github.com/z63d/runwasi/commit/3a72785bf73ec69191929d5529d0ab6c2842a6f6"
+        },
+        "date": 1740789451914,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "wamr/memory-usage",
+            "value": 14812,
+            "unit": "kB",
+            "extra": "shim: 12288 kB\nzygote: 2524 kB"
+          },
+          {
+            "name": "wasmedge/memory-usage",
+            "value": 66248,
+            "unit": "kB",
+            "extra": "shim: 54016 kB\nzygote: 12232 kB"
+          },
+          {
+            "name": "wasmer/memory-usage",
+            "value": 18816,
+            "unit": "kB",
+            "extra": "shim: 15488 kB\nzygote: 3328 kB"
+          },
+          {
+            "name": "wasmtime/memory-usage",
+            "value": 19648,
+            "unit": "kB",
+            "extra": "shim: 16256 kB\nzygote: 3392 kB"
           }
         ]
       }
