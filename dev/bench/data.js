@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1740789924327,
+  "lastUpdate": 1740875761721,
   "repoUrl": "https://github.com/z63d/runwasi",
   "entries": {
     "Criterion.rs Benchmark": [
@@ -232,6 +232,52 @@ window.BENCHMARK_DATA = {
             "value": 81490286,
             "range": "± 1031812",
             "unit": "ns/iter"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "name": "Jorge Prendes",
+            "username": "jprendes",
+            "email": "jorge.prendes@gmail.com"
+          },
+          "committer": {
+            "name": "GitHub",
+            "username": "web-flow",
+            "email": "noreply@github.com"
+          },
+          "id": "28b9e9a86350829a00ae7418ed2b3ac23bd9e7bd",
+          "message": "Merge pull request #888 from jprendes/fix-ci\n\n[CI] pin the k3s version",
+          "timestamp": "2025-02-28T17:08:14Z",
+          "url": "https://github.com/z63d/runwasi/commit/28b9e9a86350829a00ae7418ed2b3ac23bd9e7bd"
+        },
+        "date": 1740875761318,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "wamr/memory-usage",
+            "value": 14760,
+            "unit": "kB",
+            "extra": "shim: 12160 kB\nzygote: 2600 kB"
+          },
+          {
+            "name": "wasmedge/memory-usage",
+            "value": 65736,
+            "unit": "kB",
+            "extra": "shim: 53632 kB\nzygote: 12104 kB"
+          },
+          {
+            "name": "wasmer/memory-usage",
+            "value": 18872,
+            "unit": "kB",
+            "extra": "shim: 15616 kB\nzygote: 3256 kB"
+          },
+          {
+            "name": "wasmtime/memory-usage",
+            "value": 19388,
+            "unit": "kB",
+            "extra": "shim: 16256 kB\nzygote: 3132 kB"
           }
         ]
       }
