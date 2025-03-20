@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1742345098242,
+  "lastUpdate": 1742431585545,
   "repoUrl": "https://github.com/z63d/runwasi",
   "entries": {
     "Criterion.rs Benchmark": [
@@ -2320,6 +2320,52 @@ window.BENCHMARK_DATA = {
             "value": 80368870,
             "range": "± 1503049",
             "unit": "ns/iter"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "name": "Jiaxiao Zhou",
+            "username": "Mossaka",
+            "email": "duibao55328@gmail.com"
+          },
+          "committer": {
+            "name": "GitHub",
+            "username": "web-flow",
+            "email": "noreply@github.com"
+          },
+          "id": "07ea10e67274338589bf32d3942647bdd9a4c4d1",
+          "message": "Merge pull request #897 from containerd/dependabot/github_actions/peaceiris/actions-gh-pages-4\n\nchore(deps): bump peaceiris/actions-gh-pages from 3 to 4",
+          "timestamp": "2025-03-07T19:44:06Z",
+          "url": "https://github.com/z63d/runwasi/commit/07ea10e67274338589bf32d3942647bdd9a4c4d1"
+        },
+        "date": 1742431584470,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "wamr/memory-usage",
+            "value": 15656,
+            "unit": "kB",
+            "extra": "shim: 12672 kB\nzygote: 2984 kB"
+          },
+          {
+            "name": "wasmedge/memory-usage",
+            "value": 66000,
+            "unit": "kB",
+            "extra": "shim: 53376 kB\nzygote: 12624 kB"
+          },
+          {
+            "name": "wasmer/memory-usage",
+            "value": 19080,
+            "unit": "kB",
+            "extra": "shim: 15488 kB\nzygote: 3592 kB"
+          },
+          {
+            "name": "wasmtime/memory-usage",
+            "value": 19652,
+            "unit": "kB",
+            "extra": "shim: 16128 kB\nzygote: 3524 kB"
           }
         ]
       }
