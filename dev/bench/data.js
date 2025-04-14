@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1744591176741,
+  "lastUpdate": 1744591220397,
   "repoUrl": "https://github.com/z63d/runwasi",
   "entries": {
     "Criterion.rs Benchmark": [
@@ -5266,6 +5266,76 @@ window.BENCHMARK_DATA = {
             "value": 19380,
             "unit": "kB",
             "extra": "shim: 16000 kB\nzygote: 3380 kB"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "name": "dependabot[bot]",
+            "username": "dependabot[bot]",
+            "email": "49699333+dependabot[bot]@users.noreply.github.com"
+          },
+          "committer": {
+            "name": "GitHub",
+            "username": "web-flow",
+            "email": "noreply@github.com"
+          },
+          "id": "4ec2e401c7dbaeb25e2192dd8a71f59b1af5a3a5",
+          "message": "chore(deps): bump openssl from 0.10.70 to 0.10.72 in the cargo group (#965)\n\nBumps the cargo group with 1 update: [openssl](https://github.com/sfackler/rust-openssl).\n\n\nUpdates `openssl` from 0.10.70 to 0.10.72\n- [Release notes](https://github.com/sfackler/rust-openssl/releases)\n- [Commits](https://github.com/sfackler/rust-openssl/compare/openssl-v0.10.70...openssl-v0.10.72)\n\n---\nupdated-dependencies:\n- dependency-name: openssl\n  dependency-version: 0.10.72\n  dependency-type: indirect\n  dependency-group: cargo\n...\n\nSigned-off-by: dependabot[bot] <support@github.com>\nCo-authored-by: dependabot[bot] <49699333+dependabot[bot]@users.noreply.github.com>",
+          "timestamp": "2025-04-04T21:49:47Z",
+          "url": "https://github.com/z63d/runwasi/commit/4ec2e401c7dbaeb25e2192dd8a71f59b1af5a3a5"
+        },
+        "date": 1744591219641,
+        "tool": "cargo",
+        "benches": [
+          {
+            "name": "end-to-end/wasmtime/wasi-demo-app:latest",
+            "value": 140273483,
+            "range": "± 2678129",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "end-to-end/wasmtime/wasi-demo-oci:latest",
+            "value": 82896168,
+            "range": "± 1242795",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "end-to-end/wasmedge/wasi-demo-app:latest",
+            "value": 115293555,
+            "range": "± 1590255",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "end-to-end/wasmedge/wasi-demo-oci:latest",
+            "value": 121066411,
+            "range": "± 1989473",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "end-to-end/wasmer/wasi-demo-app:latest",
+            "value": 133438754,
+            "range": "± 4523584",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "end-to-end/wasmer/wasi-demo-oci:latest",
+            "value": 133927030,
+            "range": "± 1942300",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "end-to-end/wamr/wasi-demo-app:latest",
+            "value": 84782863,
+            "range": "± 1606262",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "end-to-end/wamr/wasi-demo-oci:latest",
+            "value": 84931831,
+            "range": "± 1452068",
+            "unit": "ns/iter"
           }
         ]
       }
