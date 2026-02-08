@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1770512578553,
+  "lastUpdate": 1770517926495,
   "repoUrl": "https://github.com/z63d/runwasi",
   "entries": {
     "Criterion.rs Benchmark": [
@@ -91162,6 +91162,100 @@ window.BENCHMARK_DATA = {
             "value": 16.12753594059776,
             "unit": "tasks/s",
             "extra": "Image: app\nTasks: 1000\nParallel: 4\nDuration: 1m 2s 5ms 752us 378ns"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "name": "dependabot[bot]",
+            "username": "dependabot[bot]",
+            "email": "49699333+dependabot[bot]@users.noreply.github.com"
+          },
+          "committer": {
+            "name": "GitHub",
+            "username": "web-flow",
+            "email": "noreply@github.com"
+          },
+          "id": "775d2b5ff3b9f211ce7ecf25f5bbd5aa86b73be4",
+          "message": "chore(deps): bump the patch group with 2 updates (#973)\n\nBumps the patch group with 2 updates: [anyhow](https://github.com/dtolnay/anyhow) and [clap](https://github.com/clap-rs/clap).\n\n\nUpdates `anyhow` from 1.0.97 to 1.0.98\n- [Release notes](https://github.com/dtolnay/anyhow/releases)\n- [Commits](https://github.com/dtolnay/anyhow/compare/1.0.97...1.0.98)\n\nUpdates `clap` from 4.5.35 to 4.5.36\n- [Release notes](https://github.com/clap-rs/clap/releases)\n- [Changelog](https://github.com/clap-rs/clap/blob/master/CHANGELOG.md)\n- [Commits](https://github.com/clap-rs/clap/compare/clap_complete-v4.5.35...clap_complete-v4.5.36)\n\n---\nupdated-dependencies:\n- dependency-name: anyhow\n  dependency-version: 1.0.98\n  dependency-type: direct:production\n  update-type: version-update:semver-patch\n  dependency-group: patch\n- dependency-name: clap\n  dependency-version: 4.5.36\n  dependency-type: direct:production\n  update-type: version-update:semver-patch\n  dependency-group: patch\n...\n\nSigned-off-by: dependabot[bot] <support@github.com>\nCo-authored-by: dependabot[bot] <49699333+dependabot[bot]@users.noreply.github.com>",
+          "timestamp": "2025-04-14T20:08:05Z",
+          "url": "https://github.com/z63d/runwasi/commit/775d2b5ff3b9f211ce7ecf25f5bbd5aa86b73be4"
+        },
+        "date": 1770517915354,
+        "tool": "customBiggerIsBetter",
+        "benches": [
+          {
+            "name": "Stress Test Throughput with containerd service - wamr (app)",
+            "value": 1.135011192057753,
+            "unit": "tasks/s",
+            "extra": "Image: app\nTasks: 1000\nParallel: 4\nDuration: 14m 41s 48ms 580us 840ns"
+          },
+          {
+            "name": "Stress Test Throughput with containerd service - wasmedge (app)",
+            "value": 1.3670944991747211,
+            "unit": "tasks/s",
+            "extra": "Image: app\nTasks: 1000\nParallel: 4\nDuration: 12m 11s 478ms 329us 116ns"
+          },
+          {
+            "name": "Stress Test Throughput with containerd service - wasmer (app)",
+            "value": 1.3343814424185694,
+            "unit": "tasks/s",
+            "extra": "Image: app\nTasks: 1000\nParallel: 4\nDuration: 12m 29s 410ms 901us 719ns"
+          },
+          {
+            "name": "Stress Test Throughput with containerd service - wasmtime (app)",
+            "value": 3.7331825572695023,
+            "unit": "tasks/s",
+            "extra": "Image: app\nTasks: 1000\nParallel: 4\nDuration: 4m 27s 867ms 961us 92ns"
+          },
+          {
+            "name": "Stress Test Throughput with containerd service - wamr (oci)",
+            "value": 1.1177150797953523,
+            "unit": "tasks/s",
+            "extra": "Image: oci\nTasks: 1000\nParallel: 4\nDuration: 14m 54s 682ms 390us 957ns"
+          },
+          {
+            "name": "Stress Test Throughput with containerd service - wasmedge (oci)",
+            "value": 1.3087917738058783,
+            "unit": "tasks/s",
+            "extra": "Image: oci\nTasks: 1000\nParallel: 4\nDuration: 12m 44s 63ms 482us 71ns"
+          },
+          {
+            "name": "Stress Test Throughput with containerd service - wasmer (oci)",
+            "value": 1.3173050066026097,
+            "unit": "tasks/s",
+            "extra": "Image: oci\nTasks: 1000\nParallel: 4\nDuration: 12m 39s 125ms 635us 284ns"
+          },
+          {
+            "name": "Stress Test Throughput with containerd service - wasmtime (oci)",
+            "value": 4.485920063008239,
+            "unit": "tasks/s",
+            "extra": "Image: oci\nTasks: 1000\nParallel: 4\nDuration: 3m 42s 919ms 710us 105ns"
+          },
+          {
+            "name": "Stress Test Throughput with mock service - wamr (app)",
+            "value": 75.96303409808202,
+            "unit": "tasks/s",
+            "extra": "Image: app\nTasks: 1000\nParallel: 4\nDuration: 13s 164ms 297us 765ns"
+          },
+          {
+            "name": "Stress Test Throughput with mock service - wasmedge (app)",
+            "value": 72.62585294730339,
+            "unit": "tasks/s",
+            "extra": "Image: app\nTasks: 1000\nParallel: 4\nDuration: 13s 769ms 201us 454ns"
+          },
+          {
+            "name": "Stress Test Throughput with mock service - wasmer (app)",
+            "value": 16.425666328743702,
+            "unit": "tasks/s",
+            "extra": "Image: app\nTasks: 1000\nParallel: 4\nDuration: 1m 880ms 330us 818ns"
+          },
+          {
+            "name": "Stress Test Throughput with mock service - wasmtime (app)",
+            "value": 16.290221392571333,
+            "unit": "tasks/s",
+            "extra": "Image: app\nTasks: 1000\nParallel: 4\nDuration: 1m 1s 386ms 519us 919ns"
           }
         ]
       }
