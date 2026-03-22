@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1774140772792,
+  "lastUpdate": 1774140779734,
   "repoUrl": "https://github.com/z63d/runwasi",
   "entries": {
     "Criterion.rs Benchmark": [
@@ -44892,6 +44892,52 @@ window.BENCHMARK_DATA = {
             "value": 295871760,
             "range": "± 9248652",
             "unit": "ns/iter"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "name": "dependabot[bot]",
+            "username": "dependabot[bot]",
+            "email": "49699333+dependabot[bot]@users.noreply.github.com"
+          },
+          "committer": {
+            "name": "GitHub",
+            "username": "web-flow",
+            "email": "noreply@github.com"
+          },
+          "id": "775d2b5ff3b9f211ce7ecf25f5bbd5aa86b73be4",
+          "message": "chore(deps): bump the patch group with 2 updates (#973)\n\nBumps the patch group with 2 updates: [anyhow](https://github.com/dtolnay/anyhow) and [clap](https://github.com/clap-rs/clap).\n\n\nUpdates `anyhow` from 1.0.97 to 1.0.98\n- [Release notes](https://github.com/dtolnay/anyhow/releases)\n- [Commits](https://github.com/dtolnay/anyhow/compare/1.0.97...1.0.98)\n\nUpdates `clap` from 4.5.35 to 4.5.36\n- [Release notes](https://github.com/clap-rs/clap/releases)\n- [Changelog](https://github.com/clap-rs/clap/blob/master/CHANGELOG.md)\n- [Commits](https://github.com/clap-rs/clap/compare/clap_complete-v4.5.35...clap_complete-v4.5.36)\n\n---\nupdated-dependencies:\n- dependency-name: anyhow\n  dependency-version: 1.0.98\n  dependency-type: direct:production\n  update-type: version-update:semver-patch\n  dependency-group: patch\n- dependency-name: clap\n  dependency-version: 4.5.36\n  dependency-type: direct:production\n  update-type: version-update:semver-patch\n  dependency-group: patch\n...\n\nSigned-off-by: dependabot[bot] <support@github.com>\nCo-authored-by: dependabot[bot] <49699333+dependabot[bot]@users.noreply.github.com>",
+          "timestamp": "2025-04-14T20:08:05Z",
+          "url": "https://github.com/z63d/runwasi/commit/775d2b5ff3b9f211ce7ecf25f5bbd5aa86b73be4"
+        },
+        "date": 1774140765308,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "wamr/memory-usage",
+            "value": 15720,
+            "unit": "kB",
+            "extra": "shim: 12812 kB\nzygote: 2908 kB"
+          },
+          {
+            "name": "wasmedge/memory-usage",
+            "value": 66456,
+            "unit": "kB",
+            "extra": "shim: 53748 kB\nzygote: 12708 kB"
+          },
+          {
+            "name": "wasmer/memory-usage",
+            "value": 19160,
+            "unit": "kB",
+            "extra": "shim: 15508 kB\nzygote: 3652 kB"
+          },
+          {
+            "name": "wasmtime/memory-usage",
+            "value": 19980,
+            "unit": "kB",
+            "extra": "shim: 16332 kB\nzygote: 3648 kB"
           }
         ]
       }
